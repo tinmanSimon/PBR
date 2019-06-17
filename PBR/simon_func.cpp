@@ -17,6 +17,7 @@ float randFloat(float a, float b) {
 
 string fileToStr(const char* fileName) {
 	ifstream v(fileName);
+	if (!v.good()) cout << "Error! cannot find shader file: " << fileName << endl;
 	stringstream buffer;
 	buffer << v.rdbuf();
 	string bufferstr = buffer.str();
