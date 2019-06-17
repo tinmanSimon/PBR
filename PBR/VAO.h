@@ -16,10 +16,11 @@ class VAO
 	unsigned int vao;
 	unsigned int vbo;
 	unsigned int ebo;
+	bool weNeedEBO;
 public:
 	
 	//VAO pushes itself to VAOS, so no need to push it manually
-	VAO(bool weNeedEBO);
+	VAO(bool needEBO);
 	~VAO();
 
 	//usage is GL_STATIC_DRAW by default

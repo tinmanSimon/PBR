@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "VAO.h"
 #include "Shader.h"
+#include "Sphere.h"
 
 extern float vertices[];
 extern bool pause;

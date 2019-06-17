@@ -3,7 +3,7 @@
 using namespace std;
 vector<VAO*> VAOS;
 
-VAO::VAO(bool weNeedEBO) : ebo{ 0 }
+VAO::VAO(bool needEBO) : ebo{ 0 }, weNeedEBO{needEBO}
 {
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
@@ -16,6 +16,7 @@ VAO::~VAO()
 {
 	glDeleteVertexArrays(1, &vao);
 	glDeleteBuffers(1, &vbo);
+	if(weNeedEBO) glDeleteBuffers(1, &ebo);
 }
 
 void VAO::bufferData(void* data, GLsizeiptr size, void* ebodata, GLsizeiptr ebosize, GLenum usage) {
@@ -23,11 +24,10 @@ void VAO::bufferData(void* data, GLsizeiptr size, void* ebodata, GLsizeiptr ebos
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, size, data, usage);
 
-	//if (ebosize > 0) {
+	if (ebodata != NULL) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, ebosize, ebodata, GL_STATIC_DRAW);
-	//}
-	
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, ebosize, ebodata, usage);
+	}
 }
 
 void VAO::addAttribute(GLuint index,
