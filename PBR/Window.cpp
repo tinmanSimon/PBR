@@ -73,7 +73,7 @@ void processInput(GLFWwindow* window)
 		if (spheres[0]->roughness < 0.99f) spheres[0]->roughness += 0.01;
 	}
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		if (spheres[0]->roughness > 0.11f) spheres[0]->roughness -= 0.01;
+		if (spheres[0]->roughness > 0.05f) spheres[0]->roughness -= 0.01;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 		if (spheres[0]->metallic > 0.01f) spheres[0]->metallic -= 0.01;

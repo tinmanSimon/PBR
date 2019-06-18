@@ -44,7 +44,7 @@ void drawerinit() {
 	cam = new Camera();
 
 	//add spheres
-	spheres.push_back(new Sphere(vec3(0,0,0), 0.5f, 120, 120));
+	spheres.push_back(new Sphere(vec3(0,0,0), 1.0f, 720, 720));
 	spheres[0]->bufferData(2);
 	spheres[0]->createShader("vertex.txt", "frag.txt");
 
