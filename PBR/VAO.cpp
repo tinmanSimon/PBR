@@ -30,6 +30,12 @@ void VAO::bufferData(void* data, GLsizeiptr size, void* ebodata, GLsizeiptr ebos
 	}
 }
 
+void VAO::bufferSubData(GLintptr offset, GLsizeiptr size, const GLvoid* data, GLenum target) {
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferSubData(target, offset, size, data);
+}
+
 void VAO::addAttribute(GLuint index,
 	GLint size,
 	GLsizei stride,

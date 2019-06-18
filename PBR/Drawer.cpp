@@ -37,11 +37,14 @@ Drawer::~Drawer()
 }
 
 void drawerinit() {
+	//init simone func
+	initRand();
+
 	//init camera
 	cam = new Camera();
 
 	//add spheres
-	spheres.push_back(new Sphere(vec3(0,0,0), 0.2f, 360, 80));
+	spheres.push_back(new Sphere(vec3(0,0,0), 0.5f, 120, 120));
 	spheres[0]->bufferData(2);
 	spheres[0]->createShader("vertex.txt", "frag.txt");
 

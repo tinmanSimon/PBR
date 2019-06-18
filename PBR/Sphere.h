@@ -7,6 +7,7 @@
 #include <vector>
 #include "VAO.h"
 #include "Shader.h"
+#include "Camera.h"
 
 class Sphere
 {
@@ -38,7 +39,11 @@ public:
 	void update(glm::mat4 m, glm::mat4 v, glm::mat4 p);
 
 	std::vector<glm::vec3> points;
+	std::vector<glm::vec3> normals;
 	std::vector<glm::u32vec3> trianglesIndices;
+
+	float roughness = 0.5f;
+	float metallic = 0.5f;
 };
 
 extern std::vector<Sphere*> spheres;

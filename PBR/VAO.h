@@ -25,6 +25,7 @@ public:
 
 	//usage is GL_STATIC_DRAW by default
 	void bufferData(void* data, GLsizeiptr size, void* ebodata = NULL, GLsizeiptr ebosize = 0, GLenum = GL_STATIC_DRAW);
+	void bufferSubData(GLintptr offset, GLsizeiptr size, const GLvoid* data, GLenum target = GL_ARRAY_BUFFER);
 
 	//pointer is offset. Also, by default type = GL_FLOAT, and normalized = GL_FALSE.
 	//stride is like this: 5*sizeof(float). 

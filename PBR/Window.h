@@ -3,6 +3,7 @@
 
 #include "Drawer.h"
 #include "Model.h"
+#include "Sphere.h"
 #include <fstream>
 #include <iostream>
 

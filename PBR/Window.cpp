@@ -69,6 +69,19 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+		if (spheres[0]->roughness < 0.99f) spheres[0]->roughness += 0.01;
+	}
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+		if (spheres[0]->roughness > 0.11f) spheres[0]->roughness -= 0.01;
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+		if (spheres[0]->metallic > 0.01f) spheres[0]->metallic -= 0.01;
+	}
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		if (spheres[0]->metallic < 0.99f) spheres[0]->metallic += 0.01;
+	}
+
 	if (cam != NULL) {
 		float cameraSpeed = cam->camProtoSpeed * cam->deltaTime;
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
