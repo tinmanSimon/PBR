@@ -13,7 +13,7 @@ uniform mat4 model;
 
 void main()
 {
-    //TexCoords = aTexCoords;
+    TexCoords = aTexCoords;
     //WorldPos = vec3(model * vec4(aPos + aNormal, 1.0));
 	WorldPos = vec3(model * vec4(aPos, 1.0));
 

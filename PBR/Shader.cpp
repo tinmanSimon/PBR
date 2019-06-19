@@ -45,6 +45,8 @@ void Shader::shaderInit() {
 	//unlink shaders
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragShader);
+
+	shaders.push_back(this);
 }
 
 Shader::Shader(const char* vertex, const char* frag) {

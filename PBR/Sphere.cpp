@@ -12,18 +12,30 @@ Sphere::Sphere()
 }
 */
 
+//d is the unit vector from P to origin
+vec2 calUV(vec3 d) {
+	d = normalize(d);
+	float pi = 3.14159265359;
+	float u = 0.5 + (atan2(d.z, d.x)) / (2 * pi);
+	float v = 0.5 - asin(d.y) / pi;
+	return vec2(u, v);
+}
+
 Sphere::Sphere(glm::vec3 position, float r, int sli, int lay) : pos{ vec3(0,0,0) }, radius{ r }, slices{ sli }, layers{ lay }
 {
 	//Step 1, generate all the points.
 	//init points
 	int pointCount = 0;
 	int normalCount = 0;
+	int uvCount = 0;
 	points.resize(slices* (layers - 1) + 2);
 	normals.resize(slices* (layers - 1) + 2);
+	uvs.resize(slices* (layers - 1) + 2);
 
 	//generate point at the top
 	points[pointCount++] = vec3(pos.x, pos.y + radius, pos.z);
 	normals[normalCount++] = vec3(0.0f, 1.0f, 0.0f);
+	uvs[uvCount++] = calUV(vec3(0.0f, 1.0f, 0.0f));
 
 	//generate all the points in the middle layers
 	for (float i = 1.0f; i < layers; ++i) {
@@ -38,12 +50,18 @@ Sphere::Sphere(glm::vec3 position, float r, int sli, int lay) : pos{ vec3(0,0,0)
 			z = L * (float)sin(radians(curtheta));
 			points[pointCount++] = vec3(x, y, z) + pos;
 			normals[normalCount++] = vec3(x, y, z);
+
+			//uv mapping
+			uvs[uvCount++] = calUV(vec3(-x, -y, -z));
 		}
 	}
 
 	//generate point at the bottom
 	points[pointCount++] = vec3(pos.x, pos.y - radius, pos.z);
 	normals[normalCount++] = vec3(0.0f, -1.0f, 0.0f);
+	uvs[uvCount++] = calUV(vec3(0.0f, 1.0f, 0.0f));
+
+	//for (int j = 0; j < 100; ++j) cout << uvs[j].x << " "<<uvs[j].y << endl;
 
 	//Step 2, generate all the indices for triangles
 	int traingleCount = 0;
@@ -79,7 +97,7 @@ Sphere::Sphere(glm::vec3 position, float r, int sli, int lay) : pos{ vec3(0,0,0)
 		else trianglesIndices[traingleCount++] = u32vec3(startPoint + i, endPoint, startPoint + i + 1);
 	}
 
-	
+	spheres.push_back(this);
 }
 
 
@@ -96,20 +114,24 @@ void Sphere::bufferData(int dataType) {
 
 	//points
 	if (dataType == 1) {
-		vao->bufferData(NULL, points.size() * sizeof(vec3) + normals.size() * sizeof(vec3));
+		vao->bufferData(NULL, points.size() * sizeof(vec3) + normals.size() * sizeof(vec3) + uvs.size() * sizeof(vec2));
 		vao->bufferSubData(0, points.size() * sizeof(vec3), &points[0]);
 		vao->bufferSubData(points.size() * sizeof(vec3), normals.size() * sizeof(vec3), &normals[0]);
+		vao->bufferSubData(points.size() * sizeof(vec3) + normals.size() * sizeof(vec3), uvs.size() * sizeof(vec2), &uvs[0]);
 		vao->addAttribute(0, 3, 3 * sizeof(float), 0);
 		vao->addAttribute(2, 3, 3 * sizeof(float), (void*)(points.size() * sizeof(vec3)));
+		vao->addAttribute(1, 2, 2 * sizeof(float), (void*)(points.size() * sizeof(vec3) + normals.size()*sizeof(vec3)));
 	}
 
 	//triangles
 	else if (dataType == 2) {
-		vao->bufferData(NULL, points.size() * sizeof(vec3) + normals.size() * sizeof(vec3), &trianglesIndices[0], trianglesIndices.size()*sizeof(u32vec3));
+		vao->bufferData(NULL, points.size() * sizeof(vec3) + normals.size() * sizeof(vec3) + uvs.size() * sizeof(vec2), &trianglesIndices[0], trianglesIndices.size()*sizeof(u32vec3));
 		vao->bufferSubData(0, points.size() * sizeof(vec3), &points[0]);
 		vao->bufferSubData(points.size() * sizeof(vec3), normals.size() * sizeof(vec3), &normals[0]);
+		vao->bufferSubData(points.size() * sizeof(vec3) + normals.size() * sizeof(vec3), uvs.size() * sizeof(vec2), &uvs[0]);
 		vao->addAttribute(0, 3, 3 * sizeof(float), 0);
 		vao->addAttribute(2, 3, 3 * sizeof(float), (void*)(points.size() * sizeof(vec3)));
+		vao->addAttribute(1, 2, 2 * sizeof(float), (void*)(points.size() * sizeof(vec3) + normals.size() * sizeof(vec3)));
 	}
 	else cout << "ERROR! wrong data type for bufferdata! datatype = " << dataType << endl;
 }
@@ -121,7 +143,6 @@ void Sphere::bufferData(VAO* v, int dataType) {
 
 void Sphere::createShader(const char* vertex, const char* frag) {
 	shader = new Shader(vertex, frag);
-	shaders.push_back(shader);
 }
 
 void Sphere::setShader(Shader* s) {
@@ -139,6 +160,7 @@ void Sphere::draw(int drawType) {
 	}
 	vao->use();
 	shader->use();
+	for(int i = 0; i < tex.size(); ++i) tex[i]->use(GL_TEXTURE0 + i);
 	shader->setmat4(model, "model");
 	shader->setmat4(view, "view");
 	shader->setmat4(proj, "projection");
@@ -151,12 +173,19 @@ void Sphere::update(mat4 m, mat4 v, mat4 p) {
 	view = v;
 	proj = p;
 	shader->setVec3(cam->cameraPos.x, cam->cameraPos.y, cam->cameraPos.z, "camPos");
-	shader->setFloat(metallic, "metallic");
-	shader->setFloat(roughness, "roughness");
+	//shader->setFloat(metallic, "metallic");
+	//shader->setFloat(roughness, "roughness");
 	shader->setVec3(5.0f, 5.0f, 5.0f, "lightPosition");
 	shader->setVec3(300.0f, 300.0f, 300.0f, "lightColor");
 	float t = abs(sin(glfwGetTime()));
-	shader->setVec3(t, 1.0f-t, 0.0f, "albedo");
-	//shader->setVec3(0.5f,0.0f, 0.0f, "albedo");
+	//shader->setVec3(t, 1.0f-t, 0.9f, "albedo");
+	//shader->setVec3(1.0f, 0.71f, 0.29f, "albedo");
 	shader->setFloat(1.0f, "ao");
+}
+
+void Sphere::loadTexture(const char* filename, int texnum, const char* mapname) {
+	tex.push_back(new Texture(filename));
+	if (shader != NULL) {
+		shader->setInt(texnum, mapname);
+	}
 }

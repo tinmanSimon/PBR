@@ -8,6 +8,7 @@
 #include "VAO.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "Texture.h"
 
 class Sphere
 {
@@ -17,6 +18,7 @@ class Sphere
 
 	VAO* vao = NULL;
 	Shader* shader = NULL;
+	std::vector<Texture*> tex;
 
 	glm::mat4 model, view, proj;
 
@@ -37,9 +39,11 @@ public:
 	//drawType == 1 then it's points, 3 then it's lines, 2 then it's triangles
 	void draw(int drawType);
 	void update(glm::mat4 m, glm::mat4 v, glm::mat4 p);
+	void loadTexture(const char*, int texnum, const char* mapname); //mapname is the target sample2D's name in fragment shader
 
 	std::vector<glm::vec3> points;
 	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> uvs;
 	std::vector<glm::u32vec3> trianglesIndices;
 
 	float roughness = 0.5f;

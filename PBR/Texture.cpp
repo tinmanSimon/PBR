@@ -20,6 +20,8 @@ Texture::Texture(float width, float height, bool multisample)
 	glGenTextures(1, &id);
 	glGenRenderbuffers(1, &rbo);
 	resetWidthHeight(w, h, multisample);
+	
+	globalTextures.push_back(this);
 }
 
 void Texture::resetWidthHeight(float width, float height, bool multisample) {
@@ -106,6 +108,8 @@ Texture::Texture(const char* filename, string typestr, string pathstr, GLenum RG
 		std::cout << "Failed to load texture" << std::endl;
 	}
 	stbi_image_free(data);
+
+	globalTextures.push_back(this);
 }
 
 
@@ -168,4 +172,5 @@ void Texture::loadCubemap(std::vector<std::string>& faces)
 
 Texture::Texture(std::vector<std::string>& faces) {
 	loadCubemap(faces);
+	globalTextures.push_back(this);
 }

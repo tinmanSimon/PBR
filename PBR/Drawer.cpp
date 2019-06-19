@@ -44,18 +44,32 @@ void drawerinit() {
 	cam = new Camera();
 
 	//add spheres
-	spheres.push_back(new Sphere(vec3(0,0,0), 1.0f, 720, 720));
-	spheres[0]->bufferData(2);
-	spheres[0]->createShader("vertex.txt", "frag.txt");
+	Sphere* sph = new Sphere(vec3(0, 0, 0), 1.0f, 720, 720);
+	sph->bufferData(2);
+	sph->createShader("vertex.txt", "frag.txt");
+	
+
+	if (true) {
+		sph->loadTexture("rustediron2_basecolor.png", 0, "albedoMap");
+		sph->loadTexture("rustediron2_metallic.png", 1, "metallicMap");
+		sph->loadTexture("rustediron2_roughness.png", 2, "roughnessMap");
+		sph->loadTexture("rustediron2_normal.png", 3, "normalMap");
+	}
+
+	if (false) {
+		sph->loadTexture("Iron-Scuffed_basecolor.png", 0, "albedoMap");
+		sph->loadTexture("Iron-Scuffed_metallic.png", 1, "metallicMap");
+		sph->loadTexture("Iron-Scuffed_roughness.png", 2, "roughnessMap");
+		sph->loadTexture("Iron-Scuffed_normal.png", 3, "normalMap");
+	}
+	
 
 	//below is for multi sample fbo
 	//FBO
 	tForFbo = new Texture(window->width, window->height, true);
-	globalTextures.push_back(tForFbo);
 	framebuffer = tForFbo->framebuffer;
 	//IFBO
 	tForIFbo = new Texture(window->width, window->height);
-	globalTextures.push_back(tForIFbo);
 	intermediateFBO = tForIFbo->framebuffer;
 	//VAO
 	msaaVAO = new VAO(false);
@@ -64,7 +78,6 @@ void drawerinit() {
 	msaaVAO->addAttribute(1, 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 	//shader
 	msaaShader = new Shader("msaaVertex.txt", "msaaFrag.txt");
-	shaders.push_back(msaaShader);
 	msaaShader->setInt(0, "screenTexture");
 }
 
