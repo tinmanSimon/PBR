@@ -40,7 +40,7 @@ public:
 
 	Texture();
 
-	//cubemap constructor. i == 1 means cubemap
+	//cubemap constructor.
 	Texture(std::vector<std::string>& faces);
 
 	//generate texture color buffer

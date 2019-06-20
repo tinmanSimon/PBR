@@ -97,5 +97,17 @@
     <Text Include="msaaFrag.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="cubemapVertex.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="cubemapFrag.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="skyboxVertex.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="skyboxFrag.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

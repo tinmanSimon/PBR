@@ -15,13 +15,14 @@ class Window
 {
 	char* name;
 
-	GLFWwindow* window;
+	
 
 
 
 public:
 	float width;
 	float height;
+	GLFWwindow* window;
 
 	Window(char* window_name, float _width, float _height);
 	~Window();

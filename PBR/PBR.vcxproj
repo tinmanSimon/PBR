@@ -153,9 +153,13 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="cubemapFrag.txt" />
+    <Text Include="cubemapVertex.txt" />
     <Text Include="frag.txt" />
     <Text Include="msaaFrag.txt" />
     <Text Include="msaaVertex.txt" />
+    <Text Include="skyboxFrag.txt" />
+    <Text Include="skyboxVertex.txt" />
     <Text Include="vertex.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -18,7 +18,7 @@ using namespace glm;
 
 int main() {
 	float width = 1900;
-	float height = 1200;
+	float height = 1400;
 	char w_name[100] = "secOpengl";
 	
 	window = new Window(w_name, width, height);
